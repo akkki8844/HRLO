@@ -1,0 +1,89 @@
+import pickle
+import numpy as np
+import glob
+import csv
+import os
+
+from analysis.collapse_detector import CollapseDetector
+
+
+def load_latencies(csv_path):
+    timestamps = []
+    with open(csv_path, "r") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            timestamps.append(float(row["timestamp"]))
+
+    if len(timestamps) < 2:
+        return None
+
+    return np.diff(timestamps)
+
+
+def build_collapse_signatures(data_dir, baseline_profile):
+    detector = CollapseDetector(
+        latency_z_threshold=2.5,
+        entropy_drop_threshold=0.35,
+        min_steps=3,
+    )
+
+    signatures = []
+
+    button_files = glob.glob(
+        os.path.join(data_dir, "*_buttons_*.csv")
+    )
+
+    for path in button_files:
+        latencies = load_latencies(path)
+        if latencies is None:
+            continue
+
+        result = detector.detect(latencies)
+
+        if not result["collapsed"]:
+            continue
+
+        signature = {
+            "collapse_step": result["collapse_step"],
+            "latency_at_collapse": result["latency_at_collapse"],
+            "z_score": result["z_score"],
+            "entropy_before": result["entropy_before"],
+            "entropy_after": result["entropy_after"],
+            "latency_mean": float(np.mean(latencies)),
+            "latency_std": float(np.std(latencies)),
+            "latency_ratio_to_baseline": float(
+                result["latency_at_collapse"] / baseline_profile["mean_latency"]
+            ),
+        }
+
+        signatures.append(signature)
+
+    if len(signatures) == 0:
+        raise RuntimeError("No collapses detected in dataset")
+
+    return {
+        "num_signatures": len(signatures),
+        "signatures": signatures,
+    }
+
+
+if __name__ == "__main__":
+    baseline_path = "models/baseline_profiles.pkl"
+    perturbed_data_dir = "data/raw/button_events"
+    output_path = "models/collapse_signatures.pkl"
+
+    with open(baseline_path, "rb") as f:
+        baseline_profile = pickle.load(f)
+
+    signatures = build_collapse_signatures(
+        perturbed_data_dir,
+        baseline_profile,
+    )
+
+    os.makedirs("models", exist_ok=True)
+
+    with open(output_path, "wb") as f:
+        pickle.dump(signatures, f)
+
+    print("Collapse signatures built successfully")
+    print(f"Detected {signatures['num_signatures']} collapse events")
