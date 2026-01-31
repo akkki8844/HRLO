@@ -1,0 +1,36 @@
+{
+  "concept": "linear_equations",
+  "description": "Solve a linear equation step by step and explain reasoning after each step.",
+  "problems": [
+    {
+      "id": "L1",
+      "prompt": "Solve: 3x + 5 = 20",
+      "expected_steps": [
+        "identify_equation",
+        "subtract_constant",
+        "divide_coefficient",
+        "state_solution"
+      ]
+    },
+    {
+      "id": "L2",
+      "prompt": "Solve: 2(x - 4) = 10",
+      "expected_steps": [
+        "expand_expression",
+        "simplify",
+        "divide_coefficient",
+        "state_solution"
+      ]
+    },
+    {
+      "id": "L3",
+      "prompt": "Solve: 5x - 7 = 3x + 9",
+      "expected_steps": [
+        "collect_like_terms",
+        "subtract_variable",
+        "divide_coefficient",
+        "state_solution"
+      ]
+    }
+  ]
+}
