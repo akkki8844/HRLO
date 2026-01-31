@@ -1,0 +1,33 @@
+hardware:
+  eeg:
+    device: generic_eeg_headset
+    channels: 4
+    sampling_rate_hz: 256
+    reference: average
+    impedance_check: false
+
+  microcontroller: 
+    type: esp32
+    connection: usb
+    baudrate: 115200
+    serial_port: /dev/ttyUSB0
+
+  button_array:
+    buttons: 5
+    debounce_ms: 50
+    pullup: true
+
+  synchronization:
+    clock_source: software
+    sync_method: shared_start_signal
+    max_drift_ms: 2
+
+  power:
+    eeg_power: battery
+    microcontroller_power: usb
+
+  environment:
+    electrical_noise_control: minimal
+    lighting: constant
+    seating: stationary 
+    
