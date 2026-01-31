@@ -1,0 +1,21 @@
+latency:
+  z_score_spike: 2.5
+  absolute_max_sec: 10.0
+
+entropy:
+  drop_threshold: 0.35
+  min_entropy: 0.1
+
+collapse:
+  min_steps_required: 3
+  consecutive_spikes: 1
+  confidence_level: 0.95
+
+waveform:
+  smoothing_window: 3
+  min_latency_sec: 0.05
+  max_latency_sec: 15.0
+
+quality_control:
+  max_missing_steps: 1
+  max_signal_dropout_sec: 2.0
