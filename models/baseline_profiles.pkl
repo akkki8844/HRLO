@@ -1,0 +1,62 @@
+import pickle
+import numpy as np
+import glob
+import csv
+import os
+
+
+def load_latency_from_buttons(csv_path):
+    timestamps = []
+    with open(csv_path, "r") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            timestamps.append(float(row["timestamp"]))
+    if len(timestamps) < 2:
+        return None
+    return np.diff(timestamps)
+
+
+def build_profiles(data_dir):
+    latency_profiles = []
+
+    button_files = glob.glob(
+        os.path.join(data_dir, "*_buttons_*.csv")
+    )
+
+    for path in button_files:
+        latencies = load_latency_from_buttons(path)
+        if latencies is None:
+            continue
+        latency_profiles.append(latencies)
+
+    if len(latency_profiles) == 0:
+        raise RuntimeError("No valid baseline button data found")
+
+    all_latencies = np.concatenate(latency_profiles)
+
+    baseline_profile = {
+        "mean_latency": float(np.mean(all_latencies)),
+        "std_latency": float(np.std(all_latencies)),
+        "median_latency": float(np.median(all_latencies)),
+        "min_latency": float(np.min(all_latencies)),
+        "max_latency": float(np.max(all_latencies)),
+        "num_sessions": len(latency_profiles),
+        "num_steps": int(all_latencies.size),
+    }
+
+    return baseline_profile
+
+
+if __name__ == "__main__":
+    data_dir = "data/raw/button_events"
+    output_path = "models/baseline_profiles.pkl"
+
+    profile = build_profiles(data_dir)
+
+    os.makedirs("models", exist_ok=True)
+
+    with open(output_path, "wb") as f:
+        pickle.dump(profile, f)
+
+    print("Baseline profiles built successfully")
+    print(profile)
