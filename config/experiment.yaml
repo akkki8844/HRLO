@@ -1,0 +1,42 @@
+experiment_name: HRML_baseline_perturbation
+
+sampling_rate_hz: 256
+
+reasoning_steps:
+  max_steps: 12
+  min_steps: 3
+
+conditions: 
+  - name: baseline
+    description: original_problem
+    perturbation_level: 0 
+
+  - name: mild_perturbation
+    desription: small_condition_change
+    perturbation_level: 1
+
+  - name: strong_perturbation
+    description: constraint_flip
+    perturbation_level: 2
+
+timing:
+max_session_duration_sec: 900
+rest between_conditions_sec: 60
+
+latency_analysis:
+  smoothing_window: 3
+  entropy_window: 3
+
+collapse_detection:
+  latency_z_threshold: 2.5
+  entropy_drop_threshold: 0.35
+  min_steps: 3
+
+output:
+  save_raw: true
+  save_processed: true
+  export_figures: true
+
+ethics: 
+  informed_consent_required: true
+  anonymize_participant_id: true
