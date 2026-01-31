@@ -1,0 +1,41 @@
+{
+  "concept": "linear_equations",
+  "description": "Perturbation condition introducing small structural changes to test reasoning stability.",
+  "problems": [
+    {
+      "id": "P1",
+      "prompt": "Solve: 3x + 5 = 20, then explain what changes if 5 is replaced with a variable k.",
+      "expected_steps": [
+        "identify_equation",
+        "subtract_constant",
+        "introduce_parameter",
+        "divide_coefficient",
+        "state_general_solution"
+      ],
+      "perturbation_type": "parameter_injection"
+    },
+    {
+      "id": "P2",
+      "prompt": "Solve: 2(x - 4) = 10, then consider the case where the right-hand side is unknown.",
+      "expected_steps": [
+        "expand_expression",
+        "simplify",
+        "introduce_unknown_rhs",
+        "divide_coefficient",
+        "state_general_solution"
+      ],
+      "perturbation_type": "unknown_target"
+    },
+    {
+      "id": "P3",
+      "prompt": "Solve: 5x - 7 = 3x + 9, then explain what happens if both sides contain the same variable.",
+      "expected_steps": [
+        "collect_like_terms",
+        "subtract_variable",
+        "analyze_identity_case",
+        "state_solution_condition"
+      ],
+      "perturbation_type": "structural_symmetry"
+    }
+  ]
+}
