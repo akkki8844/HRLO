@@ -1,0 +1,33 @@
+{
+  "concept": "linear_equations",
+  "description": "Control condition with structurally similar problems and no perturbations.",
+  "problems": [
+    {
+      "id": "C1",
+      "prompt": "Solve: x + 7 = 15",
+      "expected_steps": [
+        "identify_equation",
+        "subtract_constant",
+        "state_solution"
+      ]
+    },
+    {
+      "id": "C2",
+      "prompt": "Solve: 4x = 24",
+      "expected_steps": [
+        "identify_equation",
+        "divide_coefficient",
+        "state_solution"
+      ]
+    },
+    {
+      "id": "C3",
+      "prompt": "Solve: x - 9 = 2",
+      "expected_steps": [
+        "identify_equation",
+        "add_constant",
+        "state_solution"
+      ]
+    }
+  ]
+}
